@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nosso Álbum 📸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bege: #f5ede0;
+      --bege-escuro: #e8d5bc;
+      --rose: #d4808a;
+      --rose-claro: #f2b5bb;
+      --vermelho: #9b2335;
+      --dourado: #c9a84c;
+      --dourado-claro: #e8c97a;
+      --texto: #4a2c2a;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bege);
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--texto);
+      padding: 0 0 80px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(212,128,138,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(155,35,53,0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .album-header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid rgba(201,168,76,0.25);
+      margin-bottom: 60px;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      color: var(--dourado);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--vermelho); }
+
+    .ornament {
+      color: var(--dourado);
+      font-size: 1.2rem;
+      letter-spacing: 8px;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+
+    .album-header h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 400;
+      font-size: 1.1rem;
+      letter-spacing: 6px;
+      color: var(--vermelho);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .album-header .subtitle {
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--rose);
+    }
+
+    .album-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .photo-grid {
+      columns: 3 280px;
+      gap: 20px;
+    }
+
+    .photo-item {
+      break-inside: avoid;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 1px;
+      border: 1.5px solid rgba(201,168,76,0.2);
+      box-shadow: 0 4px 20px rgba(74,44,42,0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: rgba(255,252,248,0.8);
+    }
+
+    .photo-item:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 12px 40px rgba(155,35,53,0.18);
+      border-color: rgba(201,168,76,0.5);
+    }
+
+    .photo-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .photo-caption {
+      padding: 12px 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--rose);
+      text-align: center;
+      background: rgba(255,250,244,0.9);
+    }
+
+    /* LIGHTBOX */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(30,10,10,0.92);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #lightbox.open { display: flex; }
+
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border: 1px solid rgba(201,168,76,0.3);
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 28px;
+      font-size: 2rem;
+      color: var(--dourado-claro);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    #lightbox-caption {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-style: italic;
+      color: var(--rose-claro);
+    }
+
+    @media (max-width: 500px) {
+      .photo-grid { columns: 1; }
+      .back-btn { position: static; transform: none; display: block; margin-bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="lightbox">
+    <button id="lightbox-close" onclick="closeLightbox()">×</button>
+    <img id="lightbox-img" src="" alt=""/>
+    <p id="lightbox-caption"></p>
+  </div>
+
+  <header class="album-header">
+    <a href="index.html" class="back-btn">← voltar</a>
+    <div class="ornament">✦ ✦ ✦</div>
+    <h1>Nosso Álbum</h1>
+    <p class="subtitle">momentos que guardarei para sempre</p>
+  </header>
+
+  <main class="album-container">
+    <div class="photo-grid" id="photo-grid">
+      
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto1.jpeg" loading="lazy"><p class="photo-caption"><em>30 de março. 2025</em></p></div>
+
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto3.jpeg" loading="lazy"><p class="photo-caption"><em>20 de abril. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto4.jpeg" loading="lazy"><p class="photo-caption"><em>21 de abril. 2025</em></p></div>
+
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto15.jpeg" loading="lazy"><p class="photo-caption"><em>2 de maio. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto6.jpeg" loading="lazy"><p class="photo-caption"><em>4 de maio. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto17.jpeg" loading="lazy"><p class="photo-caption"><em>4 de maio. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto16.jpeg" loading="lazy"><p class="photo-caption"><em>11 de maio. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto7.jpeg" loading="lazy"><p class="photo-caption"><em>24 de maio. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto14.jpeg" loading="lazy"><p class="photo-caption"><em>24 de maio. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto5.jpeg" loading="lazy"><p class="photo-caption"><em>26 de maio. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto8.jpeg" loading="lazy"><p class="photo-caption"><em>31 de maio. 2025</em></p></div>
+
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto9.jpeg" loading="lazy"><p class="photo-caption"><em>12 de junho. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto18.jpeg" loading="lazy"><p class="photo-caption"><em>28 de junho. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto21.jpeg" loading="lazy"><p class="photo-caption"><em>29 de junho. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto22.jpeg" loading="lazy"><p class="photo-caption"><em>29 de junho. 2025</em></p></div>
+
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto23.jpeg" loading="lazy"><p class="photo-caption"><em>19 de outubro. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto20.jpeg" loading="lazy"><p class="photo-caption"><em>30 de outubro. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto13.jpeg" loading="lazy"><p class="photo-caption"><em>8 de novembro. 2025</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto10.jpeg" loading="lazy"><p class="photo-caption"><em>28 de dezembro. 2025</em></p></div>
+
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto11.jpeg" loading="lazy"><p class="photo-caption"><em>1 de janeiro. 2026</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto12.jpeg" loading="lazy"><p class="photo-caption"><em>4 de janeiro. 2026</em></p></div>
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto19.jpeg" loading="lazy"><p class="photo-caption"><em>11 de janeiro. 2026</em></p></div>
+
+      <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto2.jpeg" loading="lazy"><p class="photo-caption"><em>versão ghibli</em></p></div>
+
+    </div>
+</div> 
+
+    <div class="final-message">
+      <div class="ornament">❦</div>
+      <p>
+        Cada foto aqui é um pedaço da felicidade que você me deu. <br>
+        Espero que possamos criar muitas outras memórias juntos.<p></p>
+        
+        1 corithios13: 4 - 7 "O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha. Não maltrata, não procura seus interesses, não se ira facilmente, não guarda rancor. O amor não se alegra com a injustiça, mas se alegra com a verdade. Tudo sofre, tudo crê, tudo espera, tudo suporta."
+
+        
+      </p>
+      <div class="signature">Com amor, Luiz.</div>
+    </div>
+</main>
+
+  </main>
+
+  <script>
+    function openLightbox(el) {
+      const img = el.querySelector('img');
+      const caption = el.querySelector('.photo-caption');
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox-caption').textContent = caption ? caption.textContent : '';
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+    document.getElementById('lightbox').addEventListener('click', function(e) { if (e.target === this) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+
+</body>
+</html>
