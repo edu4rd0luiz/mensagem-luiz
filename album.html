@@ -8,16 +8,16 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bege: #f5ede0;
-      --bege-escuro: #e8d5bc;
-      --rose: #d4808a;
-      --rose-claro: #f2b5bb;
-      --vermelho: #9b2335;
-      --dourado: #c9a84c;
-      --dourado-claro: #e8c97a;
-      --texto: #4a2c2a;
-    }
+   :root {
+      --bege: #fdfafb;          /* Branco rosado clean */
+      --bege-escuro: #f2e8ea;   /* Cinza rosado para bordas */
+      --rose: #f4a9b8;          /* Rosa principal */
+      --rose-claro: #fbd2da;    /* Rosa pastel */
+      --vermelho: #d67d91;      /* Rosa escuro (substitui o vermelho) */
+      --dourado: #333333;       /* Grafite escuro (substitui o dourado) */
+      --dourado-claro: #777777; /* Cinza médio */
+      --texto: #2b2b2b;
+   }
 
     body {
       min-height: 100vh;
@@ -27,13 +27,14 @@
       padding: 0 0 80px;
     }
 
+    /* Ajustado para remover tons vermelhos/dourados do fundo */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background-image:
-        radial-gradient(ellipse at 20% 50%, rgba(212,128,138,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(155,35,53,0.08) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 50%, rgba(244,169,184,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(214,125,145,0.1) 0%, transparent 50%);
       pointer-events: none;
       z-index: 0;
     }
@@ -43,7 +44,7 @@
       z-index: 1;
       text-align: center;
       padding: 60px 20px 40px;
-      border-bottom: 1px solid rgba(201,168,76,0.25);
+      border-bottom: 1px solid var(--bege-escuro); /* Removido brilho dourado */
       margin-bottom: 60px;
     }
 
@@ -60,10 +61,10 @@
       text-transform: uppercase;
       transition: color 0.2s;
     }
-    .back-btn:hover { color: var(--vermelho); }
+    .back-btn:hover { color: var(--rose); }
 
     .ornament {
-      color: var(--dourado);
+      color: var(--rose); /* Mudado de dourado para rosa */
       font-size: 1.2rem;
       letter-spacing: 8px;
       opacity: 0.6;
@@ -104,18 +105,18 @@
       margin-bottom: 20px;
       position: relative;
       overflow: hidden;
-      border-radius: 1px;
-      border: 1.5px solid rgba(201,168,76,0.2);
-      box-shadow: 0 4px 20px rgba(74,44,42,0.1);
+      border-radius: 4px; /* Leve arredondado para modernizar */
+      border: 1px solid var(--bege-escuro); /* Removido dourado */
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
       cursor: pointer;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      background: rgba(255,252,248,0.8);
+      background: #ffffff;
     }
 
     .photo-item:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 12px 40px rgba(155,35,53,0.18);
-      border-color: rgba(201,168,76,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(214,125,145,0.15);
+      border-color: var(--rose-claro);
     }
 
     .photo-item img {
@@ -128,16 +129,16 @@
       padding: 12px 14px;
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.1rem;
-      color: var(--rose);
+      color: var(--vermelho);
       text-align: center;
-      background: rgba(255,250,244,0.9);
+      background: #fff;
     }
 
     /* LIGHTBOX */
     #lightbox {
       position: fixed;
       inset: 0;
-      background: rgba(30,10,10,0.92);
+      background: rgba(20, 15, 15, 0.95); /* Fundo neutro escuro */
       z-index: 100;
       display: none;
       align-items: center;
@@ -151,7 +152,7 @@
       max-width: 90vw;
       max-height: 85vh;
       object-fit: contain;
-      border: 1px solid rgba(201,168,76,0.3);
+      border: 2px solid var(--rose-claro); /* Removido dourado */
     }
 
     #lightbox-close {
@@ -159,7 +160,7 @@
       top: 20px;
       right: 28px;
       font-size: 2rem;
-      color: var(--dourado-claro);
+      color: #fff;
       cursor: pointer;
       background: none;
       border: none;
@@ -172,6 +173,20 @@
       transform: translateX(-50%);
       font-style: italic;
       color: var(--rose-claro);
+    }
+
+    .final-message {
+      text-align: center;
+      margin-top: 80px;
+      padding: 40px 20px;
+      border-top: 1px solid var(--bege-escuro);
+    }
+
+    .signature {
+      margin-top: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--vermelho);
     }
 
     @media (max-width: 500px) {
@@ -190,7 +205,7 @@
 
   <header class="album-header">
     <a href="index.html" class="back-btn">← voltar</a>
-    <div class="ornament">✦ ✦ ✦</div>
+    <div class="ornament">✿ ✿ ✿</div>
     <h1>Nosso Álbum</h1>
     <p class="subtitle">momentos que guardarei para sempre</p>
   </header>
@@ -199,10 +214,8 @@
     <div class="photo-grid" id="photo-grid">
       
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto1.jpeg" loading="lazy"><p class="photo-caption"><em>30 de março. 2025</em></p></div>
-
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto3.jpeg" loading="lazy"><p class="photo-caption"><em>20 de abril. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto4.jpeg" loading="lazy"><p class="photo-caption"><em>21 de abril. 2025</em></p></div>
-
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto15.jpeg" loading="lazy"><p class="photo-caption"><em>2 de maio. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto6.jpeg" loading="lazy"><p class="photo-caption"><em>4 de maio. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto17.jpeg" loading="lazy"><p class="photo-caption"><em>4 de maio. 2025</em></p></div>
@@ -211,40 +224,32 @@
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto14.jpeg" loading="lazy"><p class="photo-caption"><em>24 de maio. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto5.jpeg" loading="lazy"><p class="photo-caption"><em>26 de maio. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto8.jpeg" loading="lazy"><p class="photo-caption"><em>31 de maio. 2025</em></p></div>
-
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto9.jpeg" loading="lazy"><p class="photo-caption"><em>12 de junho. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto18.jpeg" loading="lazy"><p class="photo-caption"><em>28 de junho. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto21.jpeg" loading="lazy"><p class="photo-caption"><em>29 de junho. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto22.jpeg" loading="lazy"><p class="photo-caption"><em>29 de junho. 2025</em></p></div>
-
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto23.jpeg" loading="lazy"><p class="photo-caption"><em>19 de outubro. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto20.jpeg" loading="lazy"><p class="photo-caption"><em>30 de outubro. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto13.jpeg" loading="lazy"><p class="photo-caption"><em>8 de novembro. 2025</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto10.jpeg" loading="lazy"><p class="photo-caption"><em>28 de dezembro. 2025</em></p></div>
-
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto11.jpeg" loading="lazy"><p class="photo-caption"><em>1 de janeiro. 2026</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto12.jpeg" loading="lazy"><p class="photo-caption"><em>4 de janeiro. 2026</em></p></div>
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto19.jpeg" loading="lazy"><p class="photo-caption"><em>11 de janeiro. 2026</em></p></div>
-
       <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto2.jpeg" loading="lazy"><p class="photo-caption"><em>versão ghibli</em></p></div>
 
     </div>
-</div> 
 
     <div class="final-message">
       <div class="ornament">❦</div>
       <p>
         Cada foto aqui é um pedaço da felicidade que você me deu. <br>
-        Espero que possamos criar muitas outras memórias juntos.<p></p>
-        
+        Espero que possamos criar muitas outras memórias juntos.
+      </p>
+      <p style="margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
         1 corithios13: 4 - 7 "O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha. Não maltrata, não procura seus interesses, não se ira facilmente, não guarda rancor. O amor não se alegra com a injustiça, mas se alegra com a verdade. Tudo sofre, tudo crê, tudo espera, tudo suporta."
-
-        
       </p>
       <div class="signature">Com amor, Luiz.</div>
     </div>
-</main>
-
   </main>
 
   <script>
