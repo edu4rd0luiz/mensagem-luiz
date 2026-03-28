@@ -9,29 +9,24 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bege: #fff5f7;          
-      --bege-escuro: #f2d5da;   
-      --rose: #e195ab;          
-      --rose-claro: #ffccd5;    
-      --vermelho: #9b4d61;      
-      --cinza-rosa: #b8a0a5;    
-      --branco-puro: #ffffff;   
-      --texto: #5c3d42;         
+      --bege: #fff5f7;
+      --bege-escuro: #f2d5da;
+      --rose: #e195ab;
+      --rose-claro: #ffccd5;
+      --vermelho: #9b4d61;
+      --cinza-rosa: #b8a0a5;
+      --branco-puro: #ffffff;
+      --texto: #5c3d42;
     }
 
     body {
       min-height: 100vh;
       background-color: var(--bege);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-family: 'EB Garamond', serif;
-      overflow-y: auto; 
-      position: relative;
-      padding: 20px 0; 
+      color: var(--texto);
+      overflow-x: hidden;
     }
 
-    /* Textura de fundo ajustada para tons de rosa */
     body::before {
       content: '';
       position: fixed;
@@ -46,7 +41,6 @@
 
     .petal {
       position: fixed;
-      font-size: 1.2rem;
       opacity: 0;
       animation: falling linear infinite;
       z-index: 0;
@@ -66,35 +60,40 @@
       opacity: 0.7;
     }
 
-    /* ===== TELA DE SENHA ===== */
-    #lock-screen {
+    /* ===== TELA SENHA ===== */
+    #screen-lock {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    #screen-lock.hide {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+    }
+
+    .lock-card {
       position: relative;
-      z-index: 10;
-      background: rgba(255, 255, 255, 0.9);
+      z-index: 1;
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(12px);
       border: 1.5px solid var(--bege-escuro);
       border-radius: 4px;
       padding: 56px 52px;
       text-align: center;
       max-width: 420px;
-      width: 90%;
+      width: 100%;
       box-shadow: 0 4px 40px rgba(155,77,97,0.08);
-      transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
-    #lock-screen.hide {
-      opacity: 0;
-      transform: scale(0.95);
-      pointer-events: none;
-    }
+    .lock-icon { font-size: 2.4rem; margin-bottom: 8px; display: block; }
 
-    .lock-icon {
-      font-size: 2.4rem;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    #lock-screen h1 {
+    .lock-card h1 {
       font-family: 'Cinzel', serif;
       font-weight: 400;
       font-size: 1.05rem;
@@ -103,8 +102,7 @@
       text-transform: uppercase;
       margin-bottom: 6px;
     }
-
-    #lock-screen .subtitle {
+    .lock-card .subtitle {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-size: 1.1rem;
@@ -127,23 +125,9 @@
       outline: none;
       transition: all 0.3s;
     }
-
-    #password-input::placeholder {
-      letter-spacing: 2px;
-      font-size: 1rem;
-      color: var(--cinza-rosa);
-    }
-
-    #password-input:focus {
-      border-bottom-color: var(--vermelho);
-      box-shadow: 0 4px 12px rgba(155,77,97,0.1);
-    }
-
-    #password-input.shake {
-      animation: shake 0.4s ease;
-      border-bottom-color: var(--vermelho);
-    }
-
+    #password-input::placeholder { letter-spacing: 2px; font-size: 1rem; color: var(--cinza-rosa); }
+    #password-input:focus { border-bottom-color: var(--vermelho); box-shadow: 0 4px 12px rgba(155,77,97,0.1); }
+    #password-input.shake { animation: shake 0.4s ease; }
     @keyframes shake {
       0%,100% { transform: translateX(0); }
       25%      { transform: translateX(-8px); }
@@ -160,7 +144,6 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
-
     #error-msg.show { opacity: 1; }
 
     .btn-enter {
@@ -176,35 +159,28 @@
       cursor: pointer;
       text-transform: uppercase;
       transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
     }
+    .btn-enter:hover { box-shadow: 0 6px 24px rgba(155,77,97,0.25); transform: translateY(-1px); }
 
-    .btn-enter:hover {
-      box-shadow: 0 6px 24px rgba(155,77,97,0.25);
-      transform: translateY(-1px);
-    }
-
-    /* ===== TELA DE MENSAGEM ===== */
-    #message-screen {
-      position: relative;
-      z-index: 20;
+    /* ===== TELA MENSAGEM ===== */
+    #screen-message {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
       display: none;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transition: opacity 0.8s ease 0.5s;
       padding: 20px;
-      width: 100%;
+      overflow-y: auto;
+      opacity: 0;
+      transition: opacity 0.8s ease;
     }
-
-    #message-screen.show {
-      display: flex;
-      opacity: 1;
-    }
+    #screen-message.show { opacity: 1; pointer-events: all; }
 
     .message-card {
-      background: rgba(255, 255, 255, 0.95);
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(16px);
       border: 1.5px solid var(--bege-escuro);
       border-radius: 4px;
@@ -214,21 +190,10 @@
       text-align: center;
       box-shadow: 0 8px 60px rgba(155,77,97,0.1);
       transform: translateY(20px);
-      transition: transform 0.8s ease 0.5s;
+      transition: transform 0.8s ease;
+      margin: auto;
     }
-
-    #message-screen.show .message-card {
-      transform: translateY(0);
-    }
-
-    .message-card .greeting {
-      font-family: 'Cinzel', serif;
-      font-size: 0.75rem;
-      letter-spacing: 5px;
-      color: var(--cinza-rosa);
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
+    #screen-message.show .message-card { transform: translateY(0); }
 
     .message-card h2 {
       font-family: 'Cormorant Garamond', serif;
@@ -239,30 +204,23 @@
       line-height: 1.2;
       margin-bottom: 24px;
     }
-
     .message-text {
-      font-family: 'EB Garamond', serif;
       font-size: 1.15rem;
       line-height: 1.9;
       color: var(--texto);
       margin-bottom: 36px;
     }
+    .message-text em { font-style: italic; color: var(--vermelho); }
 
-    .message-text em {
-      font-style: italic;
-      color: var(--vermelho);
-    }
-
-    .divider-gold {
+    .divider {
       display: flex;
       align-items: center;
       gap: 12px;
       margin: 28px 0;
       color: var(--bege-escuro);
       font-size: 0.8rem;
-      letter-spacing: 4px;
     }
-    .divider-gold::before, .divider-gold::after {
+    .divider::before, .divider::after {
       content: '';
       flex: 1;
       height: 1px;
@@ -282,11 +240,9 @@
       font-size: 0.78rem;
       letter-spacing: 4px;
       text-transform: uppercase;
-      text-decoration: none;
       cursor: pointer;
       transition: all 0.3s ease;
     }
-
     .btn-album:hover {
       background: var(--rose);
       color: white;
@@ -301,6 +257,175 @@
       font-size: 1rem;
       color: var(--rose);
     }
+
+    /* ===== TELA ÁLBUM ===== */
+    #screen-album {
+      position: relative;
+      z-index: 30;
+      min-height: 100vh;
+      padding-bottom: 80px;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.9s ease;
+    }
+    #screen-album.show { opacity: 1; }
+
+    .album-header {
+      position: relative;
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid #f2e8ea;
+      margin-bottom: 60px;
+    }
+    .back-btn {
+      position: absolute;
+      left: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      color: #333;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: #f4a9b8; }
+
+    .album-header h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 400;
+      font-size: 1.1rem;
+      letter-spacing: 6px;
+      color: #d67d91;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .album-header .subtitle {
+      font-style: italic;
+      font-size: 1.2rem;
+      color: #f4a9b8;
+    }
+
+    .album-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .photo-grid { columns: 3 280px; gap: 20px; }
+
+    .photo-item {
+      break-inside: avoid;
+      margin-bottom: 20px;
+      overflow: hidden;
+      border-radius: 4px;
+      border: 1px solid #f2e8ea;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: #fff;
+    }
+    .photo-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(214,125,145,0.15);
+      border-color: #fbd2da;
+    }
+    .photo-item img { width: 100%; display: block; }
+    .photo-caption {
+      padding: 12px 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: #d67d91;
+      text-align: center;
+      background: #fff;
+    }
+
+    .final-message {
+      text-align: center;
+      margin-top: 80px;
+      padding: 40px 20px;
+      border-top: 1px solid #f2e8ea;
+    }
+    .final-signature {
+      margin-top: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: #d67d91;
+    }
+
+    /* LIGHTBOX */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,15,15,0.95);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; border: 2px solid #fbd2da; }
+    #lightbox-close {
+      position: absolute; top: 20px; right: 28px;
+      font-size: 2rem; color: #fff; cursor: pointer; background: none; border: none;
+    }
+    #lightbox-caption {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      font-style: italic; color: #fbd2da; white-space: nowrap;
+    }
+
+    /* BOTÃO MÚSICA */
+    #music-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid var(--rose-claro);
+      box-shadow: 0 4px 20px rgba(155,77,97,0.15);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: background 0.3s, transform 0.3s;
+    }
+    #music-btn.visible {
+      display: flex;
+      animation: fadeInBtn 1.5s ease forwards;
+      opacity: 0;
+    }
+    @keyframes fadeInBtn {
+      0%   { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    #music-btn:hover { background: var(--rose-claro); transform: scale(1.08); }
+    #music-btn.playing::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1.5px solid var(--rose);
+      animation: pulse-ring 2s ease-out infinite;
+      pointer-events: none;
+    }
+    @keyframes pulse-ring {
+      0%   { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.45); opacity: 0; }
+    }
+
+    @media (max-width: 500px) {
+      .photo-grid { columns: 1; }
+      .back-btn { position: static; transform: none; display: block; margin-bottom: 20px; }
+      .lock-card, .message-card { padding: 40px 28px; }
+    }
   </style>
 </head>
 <body>
@@ -312,50 +437,214 @@
   <div class="petal" style="left:75%; animation-duration:10s; animation-delay:3s;  font-size:1rem;">🤍</div>
   <div class="petal" style="left:90%; animation-duration:7s;  animation-delay:5s;  font-size:0.8rem;">🌸</div>
 
-  <div id="lock-screen">
-    <span class="lock-icon">🔒</span>
-    <div class="ornament"></div>
-    <h1>Só para Hanna</h1>
-    <p class="subtitle">Senha: nossa primeira conversa</p>
-    <br/>
-    <div class="input-wrap">
-      <input type="password" id="password-input" placeholder="ddmmaaaa" maxlength="15" autocomplete="off" />
-    </div>
-    <div id="error-msg">Senha incorreta</div>
-    <button class="btn-enter" onclick="checkPassword()">Entrar</button>
+  <audio id="bg-music" loop preload="auto">
+    <source src="musica/amoamar.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <button id="music-btn" onclick="toggleMusic()">🎵</button>
+
+  <div id="lightbox">
+    <button id="lightbox-close" onclick="closeLightbox()">×</button>
+    <img id="lightbox-img" src="" alt=""/>
+    <p id="lightbox-caption"></p>
   </div>
 
-  <div id="message-screen">
+  <!-- TELA 1: SENHA -->
+  <div id="screen-lock">
+    <div class="lock-card">
+      <span class="lock-icon">🔒</span>
+      <div class="ornament"></div>
+      <h1>Só para Hanna</h1>
+      <p class="subtitle">Senha: nossa primeira conversa</p>
+      <br/>
+      <input type="password" id="password-input" placeholder="**/**/**" maxlength="15" autocomplete="off"/>
+      <div id="error-msg">Senha incorreta</div>
+      <button class="btn-enter" onclick="checkPassword()">Entrar</button>
+    </div>
+  </div>
+
+  <!-- TELA 2: MENSAGEM -->
+  <div id="screen-message">
     <div class="message-card">
-      <div class="ornament" style="color: var(--rose); font-size:1.2rem;">❧</div>
+      <div class="ornament" style="font-size:1.2rem;">❧</div>
       <h2>Meu amor,</h2>
       <p class="message-text">
         Sei que as coisas não estão bem entre nós, mas eu não poderia deixar essa data passar...<br/>
         Eu escrevi varias cartas longas para poder te enviar, mas percebi que esse não é o momento certo. Logo, por aqui eu espero expressar um pouco do meu amor sem falar muito<br/><br/>
-        <em>Obriigado por ser essa pessoa incrivel que você é, você me ensinou muitas coisas e agregou muito mais em minha vida. 
+        <em>Obriigado por ser essa pessoa incrivel que você é, você me ensinou muitas coisas e agregou muito mais em minha vida.
         As angustias que você está passando são momentaneas, logo logo tudo ficará bem e ate lá, estou no seu aguardo e rezando pelo seu bem. Você é uma pessoa forte, determinada, inteligente e batalhadora, tenho orgulho da pessoa que você é e que busca se tornar. Saiba que Deus só da as batalhas mais dificeis para os seus melhores soldados. Te amo.</em><br/><br/>
-        Este álbum é uma pequena trilha do tempo dos momentos que tivemos juntos, mas na verdade, pode ter certeza que ate a mais breve interação com você é muito especial para mim.
+        Essa imagem de Nossa senhora de Fatima ja foi abençoada por Padre Roberto, espero que goste. Este álbum é uma pequena trilha do tempo dos momentos que tivemos juntos, mas na verdade, pode ter certeza que ate a mais breve interação com você é muito especial para mim.
       </p>
-      <div class="divider-gold">✦</div>
-      <a class="btn-album" href="album.html">
+      <div class="divider">✦</div>
+      <button class="btn-album" onclick="showAlbum()">
         <span>📸</span> Nosso Álbum
-      </a>
-      <p class="signature">— com todo meu amor </p>
+      </button>
+      <p class="signature">— com todo meu amor</p>
     </div>
   </div>
 
+  <!-- TELA 3: ÁLBUM -->
+  <div id="screen-album">
+    <header class="album-header">
+      <button class="back-btn" onclick="showMessage()">← voltar</button>
+      <div class="ornament">✿ ✿ ✿</div>
+      <h1>Nosso Álbum</h1>
+      <p class="subtitle">momentos que guardarei para sempre</p>
+    </header>
+
+    <main class="album-container">
+      <div class="photo-grid">
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto1.jpeg" loading="lazy"><p class="photo-caption"><em>30 de março. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto3.jpeg" loading="lazy"><p class="photo-caption"><em>20 de abril. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto4.jpeg" loading="lazy"><p class="photo-caption"><em>21 de abril. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto15.jpeg" loading="lazy"><p class="photo-caption"><em>2 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto6.jpeg" loading="lazy"><p class="photo-caption"><em>4 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto17.jpeg" loading="lazy"><p class="photo-caption"><em>4 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto16.jpeg" loading="lazy"><p class="photo-caption"><em>11 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto7.jpeg" loading="lazy"><p class="photo-caption"><em>24 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto14.jpeg" loading="lazy"><p class="photo-caption"><em>24 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto5.jpeg" loading="lazy"><p class="photo-caption"><em>26 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto8.jpeg" loading="lazy"><p class="photo-caption"><em>31 de maio. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto9.jpeg" loading="lazy"><p class="photo-caption"><em>12 de junho. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto18.jpeg" loading="lazy"><p class="photo-caption"><em>28 de junho. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto21.jpeg" loading="lazy"><p class="photo-caption"><em>29 de junho. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto22.jpeg" loading="lazy"><p class="photo-caption"><em>29 de junho. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto23.jpeg" loading="lazy"><p class="photo-caption"><em>19 de outubro. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto20.jpeg" loading="lazy"><p class="photo-caption"><em>30 de outubro. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto13.jpeg" loading="lazy"><p class="photo-caption"><em>8 de novembro. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto10.jpeg" loading="lazy"><p class="photo-caption"><em>28 de dezembro. 2025</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto11.jpeg" loading="lazy"><p class="photo-caption"><em>1 de janeiro. 2026</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto12.jpeg" loading="lazy"><p class="photo-caption"><em>4 de janeiro. 2026</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto19.jpeg" loading="lazy"><p class="photo-caption"><em>11 de janeiro. 2026</em></p></div>
+        <div class="photo-item" onclick="openLightbox(this)"><img src="fotos/Foto2.jpeg" loading="lazy"><p class="photo-caption"><em>versão ghibli</em></p></div>
+      </div>
+
+      <div class="final-message">
+        <div class="ornament">❦</div>
+        <p>
+          Cada foto aqui é um pedaço da felicidade que você me deu.<br>
+          Espero que possamos criar muitas outras memórias juntos.
+        </p>
+        <p style="margin-top:20px; max-width:800px; margin-left:auto; margin-right:auto; line-height:1.6;">
+          1 corithios13: 4 - 7 "O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha. Não maltrata, não procura seus interesses, não se ira facilmente, não guarda rancor. O amor não se alegra com a injustiça, mas se alegra com a verdade. Tudo sofre, tudo crê, tudo espera, tudo suporta."
+        </p>
+        <div class="final-signature">Com amor, Luiz.</div>
+      </div>
+    </main>
+  </div>
+
   <script>
-    const SENHA = '16102023';
+    const SENHA = '161023';
+    const audio    = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    let isPlaying  = false;
+    let audioCtx, gainNode, audioReady = false;
+
+    /* ---------- MÚSICA COM EFEITO ETÉREO ---------- */
+    function buildAudioGraph() {
+      if (audioReady) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      const source = audioCtx.createMediaElementSource(audio);
+
+      // Lowpass — corta agudos, fica mais suave/distante
+      const lowpass = audioCtx.createBiquadFilter();
+      lowpass.type = 'lowpass';
+      lowpass.frequency.value = 1500;
+      lowpass.Q.value = 0.16;
+
+      // Reverb sintético
+      const convolver = audioCtx.createConvolver();
+      convolver.buffer = createReverb(audioCtx, 2.0, 2.5);
+
+      // Mix seco + molhado
+      const dryGain = audioCtx.createGain();
+      const wetGain = audioCtx.createGain();
+      dryGain.gain.value = 0.35;
+      wetGain.gain.value = 0.65;
+
+      // Gain geral — começa em 0 para fade in
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0;
+
+      source.connect(lowpass);
+      lowpass.connect(dryGain);
+      lowpass.connect(convolver);
+      convolver.connect(wetGain);
+      dryGain.connect(gainNode);
+      wetGain.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      audioReady = true;
+    }
+
+    function createReverb(ctx, duration, decay) {
+      const rate    = ctx.sampleRate;
+      const length  = rate * duration;
+      const impulse = ctx.createBuffer(2, length, rate);
+      for (let c = 0; c < 2; c++) {
+        const ch = impulse.getChannelData(c);
+        for (let i = 0; i < length; i++) {
+          ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+        }
+      }
+      return impulse;
+    }
+
+    function startMusicWithFade() {
+      buildAudioGraph();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+       audio.currentTime = 15; // ⬅️ começa em 0:15
+
+
+      audio.play().then(() => {
+        isPlaying = true;
+        musicBtn.classList.add('playing');
+        gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.6, audioCtx.currentTime + 5);
+      }).catch(() => {});
+    }
+
+    function toggleMusic() {
+      if (!audioReady) {
+        buildAudioGraph();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      }
+      if (isPlaying) {
+        gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.2);
+        setTimeout(() => audio.pause(), 1200);
+        isPlaying = false;
+        musicBtn.classList.remove('playing');
+      } else {
+        audio.play();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 2);
+        isPlaying = true;
+        musicBtn.classList.add('playing');
+      }
+    }
+
+    /* ---------- SENHA ---------- */
     function checkPassword() {
       const input = document.getElementById('password-input');
       const error = document.getElementById('error-msg');
-      const lock  = document.getElementById('lock-screen');
-      const msg   = document.getElementById('message-screen');
+      const lock  = document.getElementById('screen-lock');
+      const msg   = document.getElementById('screen-message');
+
       if (input.value === SENHA) {
+document.body.style.filter = "brightness(1.05)";
+        
         lock.classList.add('hide');
+        startMusicWithFade();
+        setTimeout(() => { musicBtn.classList.add('visible'); }, 1200);
         setTimeout(() => {
           lock.style.display = 'none';
-          msg.classList.add('show');
+          msg.style.display  = 'flex';
+          requestAnimationFrame(() => requestAnimationFrame(() => msg.classList.add('show')));
         }, 800);
       } else {
         input.classList.remove('shake');
@@ -366,9 +655,57 @@
         setTimeout(() => error.classList.remove('show'), 2500);
       }
     }
+
     document.getElementById('password-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') checkPassword();
     });
+
+    /* ---------- NAVEGAÇÃO (SEM RECARREGAR) ---------- */
+    function showAlbum() {
+      const msg   = document.getElementById('screen-message');
+      const album = document.getElementById('screen-album');
+
+      msg.style.opacity = '0';
+      msg.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        msg.style.display  = 'none';
+        album.style.display = 'block';
+        window.scrollTo(0, 0);
+        requestAnimationFrame(() => requestAnimationFrame(() => album.classList.add('show')));
+      }, 500);
+    }
+
+    function showMessage() {
+      const msg   = document.getElementById('screen-message');
+      const album = document.getElementById('screen-album');
+
+      album.classList.remove('show');
+      setTimeout(() => {
+        album.style.display = 'none';
+        msg.style.display   = 'flex';
+        msg.style.opacity   = '';
+        msg.style.pointerEvents = '';
+        window.scrollTo(0, 0);
+      }, 500);
+    }
+
+    /* ---------- LIGHTBOX ---------- */
+    function openLightbox(el) {
+      const img     = el.querySelector('img');
+      const caption = el.querySelector('.photo-caption');
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox-caption').textContent = caption ? caption.textContent : '';
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
   </script>
+
 </body>
 </html>
